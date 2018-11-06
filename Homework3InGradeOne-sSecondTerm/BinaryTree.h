@@ -80,8 +80,16 @@ public:
 	}
 	void LevelOrder(BinTreeNode<T> * p);
 
+	BinTreeNode<T> * getRoot() {
+		return this->root;
+	}
+
 	LinkedStack<BinTreeNode<T> *> * Find(T item);
+
+	BinTreeNode<T> * SwapTree(BinTreeNode<T> * root);
 protected:
+	void swapTree(BinTreeNode<T> * root, BinTreeNode<T> * newSubTree);
+
 	bool find(LinkedStack<BinTreeNode<T> *> * ans, T item, BinTreeNode<T> * subTree);
 
 	BinTreeNode<T> * root;
@@ -253,6 +261,8 @@ void BinaryTree<T>::destroy(BinTreeNode<T> * &subTree) {
 template<class T>
 void BinaryTree<T>::CreateBinTree(BinTreeNode<T> * subTree) {
 	// protected function: create binary tree
+	//	Use PreOrder way to create the tree
+
 	T item;
 
 	char m;
@@ -290,6 +300,34 @@ void BinaryTree<T>::CreateBinTree(BinTreeNode<T> * subTree) {
 
 	} else {
 		subTree = NULL;	// Make this pointer empty
+	}
+
+}
+
+template<class T>
+BinTreeNode<T> * BinaryTree<T>::SwapTree(BinTreeNode<T> * root) {
+	// Declare a new Tree
+	BinTreeNode<T> * newSubTree = new BinTreeNode<T>;
+
+	newSubTree->data = root->data;
+
+	this->swapTree(root->leftChild, newSubTree->rightChild);
+	this->swapTree(root->rightChild, newSubTree->leftChild);
+	
+	return newSubTree;
+}
+
+template<class T>
+void BinaryTree<T>::swapTree(BinTreeNode<T> * root, BinTreeNode<T> * newSubTree) {
+
+	if (root != NULL) { 
+		newSubTree = new BinTreeNode<T>;
+
+		newSubTree->data = root->data;
+		cout<< "***root->data : "<< root->data<< "***"<< endl;
+
+		this->swapTree(root->leftChild, newSubTree->rightChild);
+		this->swapTree(root->rightChild, newSubTree->leftChild);
 	}
 
 }

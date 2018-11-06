@@ -14,8 +14,12 @@ int main() {
 
 	
 	// Test the Find Function
-	LinkedStack<BinTreeNode<int> *> * ans = new LinkedStack<BinTreeNode<int> *>;
-	ans = tree->Find(3);
+	// LinkedStack<BinTreeNode<int> *> * ans = new LinkedStack<BinTreeNode<int> *>;
+	// ans = tree->Find(3);
+
+	// Test the SwapTree Function
+	BinTreeNode<int> * newTree = new BinTreeNode<int>;
+	newTree = tree->SwapTree(tree->getRoot());
 
 	
 	cout<< "Please input the mark value: "<< endl;
