@@ -215,7 +215,7 @@ void BinaryTree<T>::LevelOrder(BinTreeNode<T> * p) {
 	Q.EnQueue(p);
 	while (! Q.isEmpty()) {
 		Q.DeQueue(p);
-		cout<< p->data<< " ";
+		cout<< "***"<< p->data<< "***";
 
 		if (p->leftChild != NULL) {
 			Q.EnQueue(p->leftChild);	// leftChild enters the Queue
@@ -337,7 +337,7 @@ template<class T>
 LinkedStack<BinTreeNode<T> *> * BinaryTree<T>::Find(T item) {
 	BinTreeNode<T> * p = this->root;
 
-	LinkedStack<BinTreeNode<T> *> * ans;
+	LinkedStack<BinTreeNode<T> *> * ans = new LinkedStack<BinTreeNode<T> *>;
 
 	BinTreeNode<T> * trash;
 	int i;
@@ -351,21 +351,25 @@ LinkedStack<BinTreeNode<T> *> * BinaryTree<T>::Find(T item) {
 		} else {
 
 			ans->Push(p);
+			cout<< "ans->Push : data : "<< p->data<< endl;
 			flag = this->find(ans, item, p->leftChild);
 			if (flag) {
 				return ans;
 
 			} else {
 				ans->Pop(trash, i);	
+				cout<< "Pop : data : "<< trash->data<< endl;
 			}
 
 			ans->Push(p);
+			cout<< "ans->Push : data : "<< p->data<< endl;
 			flag = this->find(ans, item, p->rightChild);
 			if (flag) {
 				return ans;
 
 			} else {
 				ans->Pop(trash, i);	
+				cout<< "Pop : data : "<< trash->data<< endl;
 				
 				return ans;
 			}
@@ -383,7 +387,9 @@ bool BinaryTree<T>::find(LinkedStack<BinTreeNode<T> *> * ans, T item, BinTreeNod
 	
 	bool flag = false;
 
+	// Declare the job variable to get the Pop-ed values
 	BinTreeNode<T> * trash;
+	int i;
 	
 	if (subTree != NULL) {
 		
@@ -391,21 +397,25 @@ bool BinaryTree<T>::find(LinkedStack<BinTreeNode<T> *> * ans, T item, BinTreeNod
 			return true;
 		} else {
 			ans->Push(subTree);
+			cout<< "ans->Push : data : "<< subTree->data<< endl;
 			flag = this->find(ans, item, subTree->leftChild);
 			if (flag) {
 				return true;
 
 			} else {
 				ans->Pop(trash, i);	
+				cout<< "Pop : data : "<< trash->data<< endl;
 			}
 
 			ans->Push(subTree);
-			flag = this->find(ans, item, subTree->rightChild, temp_temp_t);
+			cout<< "ans->Push : data : "<< subTree->data<< endl;
+			flag = this->find(ans, item, subTree->rightChild);
 			if (flag) {
 				return true;
 
 			} else {
 				ans->Pop(trash, i);
+				cout<< "Pop : data : "<< trash->data<< endl;
 
 				return false;
 			}
