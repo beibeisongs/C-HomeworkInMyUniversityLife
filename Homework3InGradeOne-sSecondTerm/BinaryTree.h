@@ -6,6 +6,7 @@
 # include<iostream>
 # include"LinkedQueue.h"
 # include"LinkedStack.h"
+# include<vector>
 
 using namespace std;
 
@@ -87,6 +88,9 @@ public:
 	LinkedStack<BinTreeNode<T> *> * Find(T item);
 
 	BinTreeNode<T> * SwapTree(BinTreeNode<T> * root);
+
+	BinTreeNode<T> * reBuildBinaryTree(vector<T> pre, vector<T> in);
+
 protected:
 	void swapTree(BinTreeNode<T> * root, BinTreeNode<T> * newSubTree);
 
@@ -116,6 +120,14 @@ protected:
 	
 	friend istream & operator >> <>(istream &in, BinaryTree<T> * Tree);
 	friend ostream & operator << <>(ostream &out, BinaryTree<T> &Tree);
+
+	int findPos(const vector<T>& v, T key) {
+		for (int i = 0; i < v.size(); ++i)
+			if (v[i] == key)
+				return i;
+		return -1;
+	}
+
 };
 
 template<class T>
@@ -462,6 +474,28 @@ bool BinaryTree<T>::find(LinkedStack<BinTreeNode<T> *> * ans, T item, BinTreeNod
 	} else {
 		return false;
 	}
+}
+
+template<class T>
+BinTreeNode<T> * BinaryTree<T>::reBuildBinaryTree(vector<T> pre, vector<T> in) {
+	// 前序的第一个元素必定是根节点
+	// 那么在中序的序列中查找这个根节点的位置，两侧分为两部分，递归下去即可
+
+	if (pre.empty()) return NULL;
+
+	int mid = findPos(in, pre[0]);
+
+	vector<T> left_p(pre.begin() + 1, pre.begin() + mid + 1), right_p(pre.begin() + mid + 1, pre.end());
+	vector<T> left_i(in.begin(), in.begin() + mid), right_i(in.begin() + mid + 1, in.end());
+	
+	BinTreeNode<T> * left = reBuildBinaryTree(left_p, left_i);
+	BinTreeNode<T> * right = reBuildBinaryTree(right_p, right_i);
+	BinTreeNode<T> * root = new BinTreeNode<T>(pre[0]);
+		
+	root->leftChild = left;
+	root->rightChild = right;
+		
+	return root;
 }
 
 # endif
