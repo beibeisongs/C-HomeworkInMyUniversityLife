@@ -9,10 +9,10 @@ int main() {
 
 	/*	功能记录：
 	*	（1） 查询各景点的相关信息							-pass 
-	*	（2） 查询图中任意两个景点间的最短路径				-			
-	*	（3） 查询图中任意两个景点间的所有路径				-
+	*	（2） 查询图中任意两个景点间的最短路径				-pass		
+	*	（3） 查询图中任意两个景点间的所有路径				-pass
 	*	（4） 增加、删除、更新有关景点和道路的信息			-pass
-	*	（5） 求从某源点出发到多个景点的最佳（最短）游览路径	-
+	*	（5） 求从某源点出发到多个景点的最佳（最短）游览路径	-pass
 	*/
 
 	Graphlnk<int, int> G1(5);
@@ -61,6 +61,14 @@ int main() {
 	int * path = new int[n];
 	G1.ShortestPath(G1, v1, dist, path);
 	G1.printShortestPath(G1, v1, dist, path);
+
+	/*
+	*	查询图中指定两个景点间的最短路径
+	*/
+	v1 = G1.getVertexPos(1);
+	v2 = G1.getVertexPos(2);
+	G1.ShortestPath(G1, v1, dist, path);
+	G1.printShortestPath(G1, v1, v2, dist, path);
 
 	/*
 	*	删除景点信息
