@@ -47,7 +47,7 @@ void encode(string source_file_path, string target_file_path) {
 	}
 
 	encode.makeHaffmanCode(haffmanTab, 2 * alphaType - 2, 0, code);
-	encode.showHaffmanTab(haffmanTab, 2 * alphaType - 1);
+	// encode.showHaffmanTab(haffmanTab, 2 * alphaType - 1);
 
 	encode.haffmanEncoding(haffmanTab, sourceFileName, targetFileName, hafIndex, alphaType, alphaFreq);
 
@@ -90,7 +90,7 @@ void decode(string source_file_path, string target_file_path) {
 	code = (char *)calloc(sizeof(char), alphaType);
 
 	decode.makeHaffmanCode(haffmanTab, 2 * alphaType - 2, 0, code);
-	decode.showHaffmanTab(haffmanTab, 2 * alphaType - 1);
+	// decode.showHaffmanTab(haffmanTab, 2 * alphaType - 1);
 
 	decode.haffmanDecoding(haffmanTab, sourceFileName, targetFileName, alphaType, fileHead);
 
@@ -100,14 +100,53 @@ void decode(string source_file_path, string target_file_path) {
 }
 
 
-int main() {
+int main(int argc, char* argv[]) {
 
-	string command_rd = "python D:\\USBei\\C++Projects\\Zip_Tool\\Zip_Tool\\hello.py D:\\USBei\\C++Projects\\Zip_Tool\\Zip_Tool\\2.txt";
-	system(command_rd.c_str());
+	// command record 1 : "SZip" "A" "D:\USBei\C++Projects\Zip_Tool\Zip_Tool\1.doc" "D:\USBei\C++Projects\Zip_Tool\Zip_Tool\1_doc.Haf"
+	// command record 2 : "SZip" "X" "D:\USBei\C++Projects\Zip_Tool\Zip_Tool\1_doc.Haf" "D:\USBei\C++Projects\Zip_Tool\Zip_Tool\1_ded.doc"
 
-	string source_file_path;
-	string target_file_path;
+	// command record 1 : "SZip" "B" "D:\USBei\C++Projects\Zip_Tool\Zip_Tool\4.rtf" "D:\USBei\C++Projects\Zip_Tool\Zip_Tool\4.Haf"
+	// command record 2 : "SZip" "Y" "D:\USBei\C++Projects\Zip_Tool\Zip_Tool\4.Haf" "D:\USBei\C++Projects\Zip_Tool\Zip_Tool\4_ded.rtf"
 
+	// command record 1 : "SZip" "B" "D:\USBei\C++Projects\Zip_Tool\Zip_Tool\lz.bmp" "D:\USBei\C++Projects\Zip_Tool\Zip_Tool\lz.Haf"
+	// command record 2 : "SZip" "Y" "D:\USBei\C++Projects\Zip_Tool\Zip_Tool\lz.Haf" "D:\USBei\C++Projects\Zip_Tool\Zip_Tool\lz_ded.bmp"
+
+	string i_Szip = string(argv[2]);
+	string source_file_path = string(argv[3]);
+	string target_file_path = string(argv[4]);
+
+	if (i_Szip == "A") {
+
+		string command_rd = "python D:\\USBei\\C++Projects_Py35_Scripts\\encode_trf.py ";
+		command_rd += source_file_path;
+		system(command_rd.c_str());
+
+		encode("D:\\USBei\\C++Projects\\Zip_Tool\\Zip_Tool\\1_doc.txt", target_file_path);
+	}
+	else if(i_Szip == "X") {
+
+		string target_file_path0 = "D:\\USBei\\C++Projects\\Zip_Tool\\Zip_Tool\\1_doc2.txt";
+
+		decode(source_file_path, target_file_path0);
+
+		string command_rd = "python D:\\USBei\\C++Projects_Py35_Scripts\\decode_trf.py ";
+		command_rd += target_file_path;
+
+		system(command_rd.c_str());
+	}
+	else if (i_Szip == "B") {
+		encode(source_file_path, target_file_path);
+	}
+	else if (i_Szip == "Y") {
+		decode(source_file_path, target_file_path);
+	}
+
+
+	/* ----------------------------------------------------------------------------------------------------------------------------------------
+	*	功能调试区
+	*/
+
+	/*
 	char mark;
 	cout << "If you want to Szip file ?" << endl;
 	cin >> mark;
@@ -137,7 +176,7 @@ int main() {
 				cout << "Sample : D:\\USBei\\C++Projects\\Zip_Tool\\Zip_Tool\\2_ded.txt" << endl;
 				cin >> target_file_path;
 
-				target_file_path = "D:\\USBei\\C++Projects\\Zip_Tool\\Zip_Tool\\1_doc.txt";
+				target_file_path = "D:\\USBei\\C++Projects\\Zip_Tool\\Zip_Tool\\1_doc2.txt";
 
 				decode(source_file_path, target_file_path);
 
@@ -146,12 +185,12 @@ int main() {
 			}
 		}
 		else {
-			cout << "Please input the absolute directory to unZip : " << endl;
-			cout << "Sample : D:\\USBei\\C++Projects\\Zip_Tool\\Zip_Tool\\2.Haf" << endl;
+			cout << "Please input the absolute directory to SZip : " << endl;
+			cout << "Sample : D:\\USBei\\C++Projects\\Zip_Tool\\Zip_Tool\\2.txt" << endl;
 			cin >> source_file_path;
 
 			cout << "Please input the absolute directory for the target file : " << endl;
-			cout << "Sample : D:\\USBei\\C++Projects\\Zip_Tool\\Zip_Tool\\2_ded.txt" << endl;
+			cout << "Sample : D:\\USBei\\C++Projects\\Zip_Tool\\Zip_Tool\\2.Haf" << endl;
 			cin >> target_file_path;
 
 			encode(source_file_path, target_file_path);
@@ -173,6 +212,7 @@ int main() {
 			decode(source_file_path, target_file_path);
 		}
 	}
+	*/
 
 	return 0;
 }

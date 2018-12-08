@@ -18,6 +18,7 @@
 *
 *	作用：节省空间
 */
+
 #pragma pack(push)
 #pragma pack(1)	
 
@@ -308,37 +309,6 @@ void Encode_Tool::haffmanEncoding(HAFFMAN_TAB * haffmanTab, const char * sourceF
 	fclose(fpIn);
 	fclose(fpOut);
 
-	/*
-
-	// 输出测试区 ----------------------------------------------------------
-
-	HAF_FILE_HEAD fileHead2;
-	FILE * f1;
-
-	f1 = fopen("D:\\USBei\\C++Projects\\Zip_Tool\\Zip_Tool\\1.Haf", "rb");
-
-	// 读取压缩的文件的头部元数据，16个字节
-	fread(&fileHead2, sizeof(HAF_FILE_HEAD), 1, f1);
-	fclose(f1);
-
-	// --------------------------------------------
-	int freq[256] = { 0 };
-
-	ALPHA_FREQ * alphaFreq2 = NULL;
-	FILE * f2;
-
-	int * alphaType2 = NULL;
-
-	*alphaType2 = fileHead2.alphaType;
-	alphaFreq2 = (ALPHA_FREQ *)calloc(sizeof(ALPHA_FREQ), *alphaType2);
-	f2 = fopen("D:\\USBei\\C++Projects\\Zip_Tool\\Zip_Tool\\1.Haf", "rb");
-
-	// 略过前16个字节的元数据
-	// fseek(f2, 16, SEEK_SET);
-	fseek(f2, sizeof(HAF_FILE_HEAD), SEEK_SET);
-	fread(alphaFreq2, sizeof(ALPHA_FREQ), *alphaType2, f2);
-	fclose(f2);
-	*/
 }
 
 int Encode_Tool::getlastValidBit(HAFFMAN_TAB * haffmanTab, int alphaType) {

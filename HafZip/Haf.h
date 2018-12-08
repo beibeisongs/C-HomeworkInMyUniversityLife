@@ -32,11 +32,13 @@
 *
 *	以此类推
 */
+
 // 同上面原理，动作是，取出var位，并判断是否为1
 #define GET_BYTE(var, id) (((var) & (1 << ((id) ^ 7))) != 0)
 
 // 同上面原理，动作变成是，设置var位为1
 #define SET_BYTE(var, id) ((var) |= (1 << ((id) ^ 7)))
+
 // 同上面原理，动作变成是，设置var位为0
 #define CLR_BYTE(var, id) ((var) &= (~(1 << ((id) ^ 7))))
 

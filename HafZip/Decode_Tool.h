@@ -90,9 +90,7 @@ ALPHA_FREQ * Decode_Tool::getAlphaFreq(const char * sourceFileName, int * alphaT
 	// 它是一个数组，储存了256个字母ASCII码对应的出现次数
 
 	int freq[256] = { 0 };
-	// int i;
-	// int id;
-
+	
 	ALPHA_FREQ * alphaFreq = NULL;
 	FILE * f;
 	// int ch;
