@@ -6,7 +6,7 @@ import sys
 
 def transfer(doc_name):
     text_name = "D:\\USBei\\C++Projects\\Zip_Tool\\Zip_Tool\\1_doc.txt"
-    f_txt = open(text_name, mode='w')
+    f_txt = open(text_name, mode='w', encoding='utf-8')
 
     # 获取文档对象
 
@@ -18,8 +18,7 @@ def transfer(doc_name):
     # 输出每一段的内容
 
     for para in file.paragraphs:
-        print(para.text)
-        f_txt.write(para.text + '\n')
+        f_txt.write(para.text + "\n")
 
     f_txt.close()
 

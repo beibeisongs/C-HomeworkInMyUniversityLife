@@ -6,8 +6,8 @@ import sys
 
 def transfer(ded_doc):
 
-    text_name = "D:\\USBei\\C++Projects\\Zip_Tool\\Zip_Tool\\1_doc.txt"
-    f_txt = open(text_name, mode='r')
+    text_name = "D:\\USBei\\C++Projects\\Zip_Tool\\Zip_Tool\\1_doc2.txt"
+    f_txt = open(text_name, mode='r', encoding='utf-8')
 
     # 获取文档对象
 
