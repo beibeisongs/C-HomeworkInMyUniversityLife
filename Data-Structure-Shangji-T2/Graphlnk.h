@@ -49,7 +49,7 @@ public:
 	~Graphlnk();			// 析构函数
 
 	T getValue(int i) {		// 取位置为i的顶点的值
-		return (i >= 0 && i < this->NumVertices) ? this->NodeTable[i].data : 0;
+		return (i >= 0 && i < this->NumVertices) ? this->NodeTable[i].data : NULL;
 	}
 	string getid(int i) {		// 取位置为i的顶点的值
 		return (i >= 0 && i < this->NumVertices) ? this->NodeTable[i].id : NULL;
@@ -61,7 +61,7 @@ public:
 		return (i >= 0 && i < this->NumVertices) ? this->NodeTable[i].desc : NULL;
 	}
 
-	void changeVertexInfor(int i, string id, string name, string desc) {
+	void changeVertexInfo(int i, string id, string name, string desc) {
 		this->NodeTable[i].id = id;
 		this->NodeTable[i].name = name;
 		this->NodeTable[i].desc = desc;
@@ -78,7 +78,9 @@ public:
 		return this->numEdges;
 	}
 
-	void ShortestPath(Graphlnk<T, E> &G, T v, E * dist, int * path);
+	void ShortestPath(Graphlnk<T, E> &G, int v, E * dist, int * path);
+	void findAllPaths(Graphlnk<T, E> &G, int v, int v2, E * dist, int ** allpaths);
+
 	void printShortestPath(Graphlnk<T, E> &G, int v, E * dist, int * path);
 	void printShortestPath(Graphlnk<T, E> &G, int v1, int v2, E * dist, int * path);
 
@@ -471,7 +473,7 @@ void Components(Graphlnk<T, E> &G) {
 }
 
 template<class T, class E>
-void Graphlnk<T, E>::ShortestPath(Graphlnk<T, E> &G, T v, E * dist, int * path) {
+void Graphlnk<T, E>::ShortestPath(Graphlnk<T, E> &G, int v, E * dist, int * path) {
 	// Graphlnk 是一个带权有向图
 	// 本算法建立一个数组：dist[j], 0<=j<n，是当前求到的从顶点v到顶点j的最短路径长度
 	// 同时用数组path[j]，0<=j<n，存放求到的最短路径
@@ -490,7 +492,9 @@ void Graphlnk<T, E>::ShortestPath(Graphlnk<T, E> &G, T v, E * dist, int * path) 
 		dist[i] = G.getWeight(v, i);	// 数组初始化，得到对应的权重
 		S[i] = false;					// S数组都初始化为false
 
-		if (i != v && dist[i] < maxValue) path[i] = v;
+		if (i != v && dist[i] < maxValue) { 
+			path[i] = v;
+		}
 		else path[i] = -1;
 	}
 
@@ -504,7 +508,8 @@ void Graphlnk<T, E>::ShortestPath(Graphlnk<T, E> &G, T v, E * dist, int * path) 
 		u = v;							// 初始化u
 
 		for (j = 0; j < n; j++) {
-			if (S[j] == false && dist[j] < min) {
+			if (S[j] == false && dist[j] < min) {	// 因为这个算法的意思是，每一个点，都要做一次延申的基点
+													// 详见最外层循环--i循环
 				u = j;
 				min = dist[j];
 			}
@@ -516,6 +521,97 @@ void Graphlnk<T, E>::ShortestPath(Graphlnk<T, E> &G, T v, E * dist, int * path) 
 				// 顶点k未加入S，且绕过u可以缩短路径
 				dist[k] = dist[u] + w;	// 修改到k的最短路径
 				path[k] = u;			// 修改到k的最短路径
+			}
+		}
+	}
+}
+
+template<class T, class E>
+void Graphlnk<T, E>::findAllPaths(Graphlnk<T, E> &G, int v, int v2, E * dist, int ** allpaths) {
+	// Graphlnk 是一个带权有向图
+	// 本算法建立一个数组：dist[j], 0<=j<n，是当前求到的从顶点v到顶点j的最短路径长度
+	// 同时用数组path[j]，0<=j<n，存放求到的最短路径
+
+	int n = G.NumberOfVertices();	// 得到顶点数
+
+	bool * S = new bool[n];			// 最短路径顶点集
+	int i;
+	int j;
+	int k;
+	E w;
+	E min;
+
+	int * path = new int[n];		// 最短路径算法所用的path
+	int all_i = 0;					// 记录all_paths 中已经到第几条路径，注意：编号0开始
+	int all_i2 = 0;
+
+	int k2 = 0;						// 最后遍历单条路径时用
+	int * d = new int[n];
+
+	// 这部分初始化了dist数组和path数组
+	for (i = 0; i < n; i++) {
+		dist[i] = G.getWeight(v, i);	// 数组初始化，得到对应的权重
+		S[i] = false;					// S数组都初始化为false
+
+		if (i != v && dist[i] < maxValue) {
+			path[i] = v;
+
+			// allpaths 中添加路径：
+			if (i == v2) {
+				allpaths[all_i][0] = v2;
+				all_i++;
+			}
+
+		}
+		else path[i] = -1;
+	}
+
+	S[v] = true;						// 顶点v加入顶点集合
+	dist[v] = 0;						// (v, v)固然距离是0
+
+	int u;
+	for (i = 0; i < n - 1; i++) {		// 选不在S中具有最短路径的顶点u
+
+		min = maxValue;					// 初始化min
+		u = v;							// 初始化u
+
+		for (j = 0; j < n; j++) {
+			if (S[j] == false && dist[j] < min) {	// 因为这个算法的意思是，每一个点，都要做一次延申的基点
+													// 详见最外层循环--i循环
+				u = j;
+				min = dist[j];
+			}
+		}
+		S[u] = true;					// 将顶点u加入集合S	// 因为此时u到v最短
+		for (k = 0; k < n; k++) {		// 修改
+
+			w = G.getWeight(u, k);
+			if (S[k] == false && w < maxValue && dist[u] + w < dist[k]) {
+
+				// 顶点k未加入S，且绕过u可以缩短路径
+				dist[k] = dist[u] + w;	// 修改到k的最短路径
+				path[k] = u;			// 修改到k的最短路径
+
+				if (k == v2) {			// 下面进行新路径的加入
+
+					k2 = 0;
+					j = v2;
+					all_i2 = 0;
+
+					while (j != v) {	// d[..]在搜集最短路径中经过的顶点
+						d[k++] = j;
+						j = path[j];
+					}
+
+					while (k > 0) {
+					
+						allpaths[all_i][all_i2] = G.getValue(d[--k]);
+						all_i2++;
+
+					}
+					all_i++;			// 已含有路径总数加1
+				}
+				
 			}
 		}
 	}
