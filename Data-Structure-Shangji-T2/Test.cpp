@@ -63,6 +63,35 @@ int main() {
 	G1.printShortestPath(G1, v1, dist, path);
 
 	/*
+	*	查询图中任意两个景点间的所有路径
+	*/
+	int ** allpaths = new int * [n];
+	for (int i = 0; i < n; i++) {
+		allpaths[i] = new int[n];	// 记录初始化
+		for (int j = 0; j < n; j++) {
+			allpaths[i][j] = -1;
+		}
+	}
+
+	G1.findAllPaths(G1, v1, v2, dist, allpaths);
+	cout << "现在输出：" << v1 << " 到 " << v2 << " 的所有路径" << endl;
+	for (int i = 0; i < n; i++) {
+		if (allpaths[i][0] != -1) {
+			cout << "从点 " << v1;
+
+			for (int j = 0; j < n; j++) {
+				if (allpaths[i][j] != -1) {
+					cout << "到 " << allpaths[i][j] << " ";
+
+					if (allpaths[i][j] == v2) break;
+				}
+
+			} cout << endl;
+		}
+	}
+
+
+	/*
 	*	查询图中指定两个景点间的最短路径
 	*/
 	v1 = G1.getVertexPos(1);
@@ -87,7 +116,7 @@ int main() {
 	*	更新景点信息
 	*/
 	int v0 = G1.getVertexPos(0);
-	G1.changeVertexInfor(v0, "00", "00", "00");
+	G1.changeVertexInfo(v0, "00", "00", "00");
 
 	Components<int, int>(G1);
 
