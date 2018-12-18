@@ -80,6 +80,8 @@ public:
 
 	void ShortestPath(Graphlnk<T, E> &G, int v, E * dist, int * path);
 	void findAllPaths(Graphlnk<T, E> &G, int v, int v2, E * dist, int ** allpaths);
+	void findAllPaths_useful(Graphlnk<T, E> &G, int v, int v2, int * temp_path, int ** allpaths, bool * visited, int * path_num);
+	void findAllPaths_useful(Graphlnk<T, E> &G, int v, int v2, int * temp_path, bool * visited, int * current_pos, int * path_num, int ** allpaths, int last_v, int ori_v);	// 子过程
 
 	void printShortestPath(Graphlnk<T, E> &G, int v, E * dist, int * path);
 	void printShortestPath(Graphlnk<T, E> &G, int v1, int v2, E * dist, int * path);
@@ -183,7 +185,7 @@ bool Graphlnk<T, E>::removeVertex(int v) {
 	Edge<T, E> * p;
 	Edge<T, E> * s;
 	Edge<T, E> * t;
-	int i;
+	
 	int k;
 
 	while (NodeTable[v].adj != NULL) {	// 删除第v个边链表的所有顶点
@@ -376,44 +378,6 @@ int Graphlnk<T, E>::getNextNeighbor(int v, int w) {
 }
 
 template<class T, class E>
-void DFS(Graphlnk<T, E> &G, const T &v) {
-	// 从顶点v出发，对图G进行深度优先遍历的主过程
-	int i;
-	int loc;
-	int n = G.NumberOfVertices();	// 取图中顶点的个数
-
-	bool * visited = new bool[n];		// 创建辅助数组
-
-	for (i = 0; i < n; i++) visited[i] = false;		// 初始化辅助数组
-
-	loc = G.getVertexPos(v);			// 获取顶点位置
-
-	DFS(G, loc, visited);
-
-	delete[] visited;
-}
-
-template<class T, class E>
-void DFS(Graphlnk<T, E> &G, int v, bool * visited) {	// 子过程
-														// 从顶点v出发，以深度优先的次序访问所有课读入的尚未访问的顶点
-														// 算法用到一个辅助数组visited，对所有访问过的顶点做标记
-	cout << "The visited vertex now: " << G.getValue(v) << endl;
-	cout << "The visited vertex now: " << G.getid(v) << endl;
-	cout << "The visited vertex now: " << G.getname(v) << endl;
-	cout << "The visited vertex now: " << G.getdesc(v) << endl;
-
-	visited[v] = true;
-
-	int w = G.getFirstNeighbor(v);
-	while (w != -1) {	// 如果邻接顶点存在
-		if (visited[w] == false) {
-			DFS(G, w, visited);
-		}
-		w = G.getNextNeighbor(v, w);	// 取v排在w后的下一个邻接顶点
-	}
-}
-
-template<class T, class E>
 void BFS(Graphlnk<T, E> &G, const T &v) {
 	// 从顶点v出发，以层序优先的次序横向搜索图，算法中使用了一个队列
 	int i;
@@ -532,6 +496,137 @@ void Graphlnk<T, E>::ShortestPath(Graphlnk<T, E> &G, int v, E * dist, int * path
 }
 
 template<class T, class E>
+void DFS(Graphlnk<T, E> &G, int v, bool * visited) {	// 子过程
+														// 从顶点v出发，以深度优先的次序访问所有课读入的尚未访问的顶点
+														// 算法用到一个辅助数组visited，对所有访问过的顶点做标记
+	cout << "The visited vertex now: " << G.getValue(v) << endl;
+	cout << "The visited vertex now: " << G.getid(v) << endl;
+	cout << "The visited vertex now: " << G.getname(v) << endl;
+	cout << "The visited vertex now: " << G.getdesc(v) << endl;
+
+	visited[v] = true;
+
+	int w = G.getFirstNeighbor(v);
+	while (w != -1) {	// 如果邻接顶点存在
+		if (visited[w] == false) {
+			DFS(G, w, visited);
+		}
+		w = G.getNextNeighbor(v, w);	// 取v排在w后的下一个邻接顶点
+	}
+}
+
+template<class T, class E>
+void DFS(Graphlnk<T, E> &G, const T &v) {
+	// 从顶点v出发，对图G进行深度优先遍历的主过程
+	int i;
+	int loc;
+	int n = G.NumberOfVertices();		// 取图中顶点的个数
+
+	bool * visited = new bool[n];		// 创建辅助数组
+
+	for (i = 0; i < n; i++) visited[i] = false;		// 初始化辅助数组
+
+	loc = G.getVertexPos(v);			// 获取顶点位置
+
+	DFS(G, loc, visited);
+
+	delete[] visited;
+}
+
+template<class T, class E>
+void Graphlnk<T, E>::findAllPaths_useful(Graphlnk<T, E> &G, int v, int v2, int * temp_path, bool * visited, int * current_pos, int * path_num, int ** allpaths, int last_v, int ori_v) {
+
+	// 子过程
+	// 从顶点v出发，以深度优先的次序访问所有课读入的尚未访问的顶点
+	// 算法用到一个辅助数组visited，对所有访问过的顶点做标记												
+
+	cout << "The visited vertex now: " << G.getValue(v) << endl;
+	cout << "The visited vertex now: " << G.getid(v) << endl;
+	cout << "The visited vertex now: " << G.getname(v) << endl;
+	cout << "The visited vertex now: " << G.getdesc(v) << endl;
+
+	visited[v] = true;
+
+	int ori_mark = false;
+
+	int w = G.getFirstNeighbor(v);
+	if (w == last_v) {
+		ori_mark = true;
+	}
+
+	while (w != -1) {								// 如果邻接顶点存在
+
+		if (!ori_mark) {
+
+			if (visited[w] == false) {
+
+				temp_path[* current_pos] = w;
+				* current_pos += 1;
+
+				if (w == v2) {
+
+					// 下面开始写入路径
+					int temp_path_i = 0;
+					while (temp_path[temp_path_i] != -1) {
+
+						allpaths[* path_num][temp_path_i] = temp_path[temp_path_i];
+						temp_path_i++;
+
+					}
+
+					* path_num += 1;
+
+					* current_pos -= 1;
+					temp_path[* current_pos] = -1;	// 复原，继续下一次记录
+
+				}
+				else {
+					this->findAllPaths_useful(G, w, v2, temp_path, visited, current_pos, path_num, allpaths, v, ori_v);
+	
+					* current_pos -= 1;
+					temp_path[* current_pos] = -1;
+
+				}
+			}
+			else {
+				visited[v] = false;				// “碰壁”则还原，以备下一次访问
+			}
+
+		}
+
+		w = G.getNextNeighbor(v, w);			// 取v排在w后的下一个邻接顶点
+		if (w == last_v) {
+			ori_mark = true;
+		}
+		else {
+			ori_mark = false;
+		}
+	}
+
+	if (last_v != ori_v) {
+		visited[v] = false;							// 该搜索基点回退的时候必须将visited设置回
+	}
+}
+
+template<class T, class E>
+void Graphlnk<T, E>::findAllPaths_useful(Graphlnk<T, E> &G, int v, int v2, int * temp_path, int ** allpaths, bool * visited, int * path_num) {
+
+	// 从顶点v出发，对图G进行深度优先遍历的主过程
+	int n = G.NumberOfVertices();		// 取图中顶点的个数
+
+	int * current_pos = new int;		// 目前的位置
+	* current_pos = 0;
+
+	int ori_v = v;
+
+	int last_v = v;
+
+	this->findAllPaths_useful(G, v, v2, temp_path, visited, current_pos, path_num, allpaths, last_v, ori_v);
+
+	delete[] visited;
+}
+
+template<class T, class E>
 void Graphlnk<T, E>::findAllPaths(Graphlnk<T, E> &G, int v, int v2, E * dist, int ** allpaths) {
 	// Graphlnk 是一个带权有向图
 	// 本算法建立一个数组：dist[j], 0<=j<n，是当前求到的从顶点v到顶点j的最短路径长度
@@ -587,6 +682,7 @@ void Graphlnk<T, E>::findAllPaths(Graphlnk<T, E> &G, int v, int v2, E * dist, in
 				min = dist[j];
 			}
 		}
+
 		S[u] = true;					// 将顶点u加入集合S	// 因为此时u到v最短
 		for (k = 0; k < n; k++) {		// 修改
 
@@ -604,13 +700,17 @@ void Graphlnk<T, E>::findAllPaths(Graphlnk<T, E> &G, int v, int v2, E * dist, in
 					all_i2 = 0;
 
 					while (j != v) {	// d[..]在搜集最短路径中经过的顶点
-						d[k++] = j;
+						d[k2] = j;
+						k2++;
+
 						j = path[j];
 					}
 
-					while (k > 0) {
+					while (k2 > 0) {
 					
-						allpaths[all_i][all_i2] = G.getValue(d[--k]);
+						allpaths[all_i][all_i2] = G.getValue(d[k2]);
+						k2--;
+
 						all_i2++;
 
 					}
@@ -618,6 +718,45 @@ void Graphlnk<T, E>::findAllPaths(Graphlnk<T, E> &G, int v, int v2, E * dist, in
 				}
 				
 			}
+			else if (k == v2 && w < maxValue) {
+
+					// 下面进行新路径的加入
+
+					k2 = 0;
+					j = v2;
+					all_i2 = 0;
+
+					d[k2] = j;
+					k2++;
+
+					d[k2] = u;
+					j = u;
+					k2++;
+
+					while (j != v) {	// d[..]在搜集最短路径中经过的顶点
+
+						j = path[j];
+
+						d[k2] = j;
+						k2++;
+					}
+
+					k2--;				// 因为上面的循环在最后一次给k2加多了一个1，所以要减回去
+					while (k2 >= 0) {
+
+						allpaths[all_i][all_i2] = G.getValue(d[k2]);
+
+						cout << d[k2] << endl;
+
+						k2--;
+
+						all_i2++;
+
+					}
+					all_i++;			// 已含有路径总数加1
+				
+			}
+
 		}
 	}
 }

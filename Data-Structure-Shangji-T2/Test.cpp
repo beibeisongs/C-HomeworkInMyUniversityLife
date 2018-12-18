@@ -17,6 +17,25 @@ int main() {
 	*	（5） 求从某源点出发到多个景点的最佳（最短）游览路径	-pass
 	*/
 
+	/* 测试数据如图：[..]中的是结点，边上的值是权值，注：根据题意，本图设计为无向图
+
+		(0,1)=10
+		(1,2)=50
+		(2,3)=30
+		(3,4)=60
+		(4,0)=100
+		(0,3)=30
+		(2,4)=10
+
+				[0]
+			-	  -		-100
+		-10			-			-	
+	[1]				  -30				[4]
+		-				-	  -10	60-
+			50-		-	  -		-
+				 [2] -20-	 [3]
+	*/
+
 	Graphlnk<int, int> G1(5);
 
 	/*	
@@ -95,17 +114,36 @@ int main() {
 		}
 	}
 
-	G1.findAllPaths(G1, v1, v2, dist, allpaths);
+	v1 = 2;
+	v2 = 4;
+
+	int * temp_path = new int[n];
+	for (int i = 0; i < n; i++) {
+		temp_path[i] = -1;
+	}
+
+	bool * visited = new bool[n];					// 创建辅助数组
+	for (int i = 0; i < n; i++) visited[i] = false;		// 初始化辅助数组
+
+	int * path_num = new int;			// 储存现在已经由多少条路径了
+	* path_num = 0;
+
+	G1.findAllPaths_useful(G1, v1, v2, temp_path, allpaths, visited, path_num);
+
+	// G1.findAllPaths(G1, v1, v2, dist, allpaths);
 	cout << "现在输出：" << v1 << " 到 " << v2 << " 的所有路径" << endl;
 	for (int i = 0; i < n; i++) {
 		if (allpaths[i][0] != -1) {
-			cout << "从点 " << v1;
+			cout << v1 << "到 ";
 
 			for (int j = 0; j < n; j++) {
 				if (allpaths[i][j] != -1) {
-					cout << "到 " << allpaths[i][j] << " ";
+					cout << allpaths[i][j] << " " << "到";
 
-					if (allpaths[i][j] == v2) break;
+					if (allpaths[i][j] == v2) {
+						cout << "达";
+						break;
+					}
 				}
 
 			} cout << endl;
