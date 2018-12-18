@@ -7,81 +7,103 @@ using namespace std;
 
 int main() {
 
-	/*	åŠŸèƒ½è®°å½•ï¼š
-	*	ï¼ˆ1ï¼‰ æŸ¥è¯¢å„æ™¯ç‚¹çš„ç›¸å…³ä¿¡æ¯							-pass 
-	*	ï¼ˆ2ï¼‰ æŸ¥è¯¢å›¾ä¸­ä»»æ„ä¸¤ä¸ªæ™¯ç‚¹é—´çš„æœ€çŸ­è·¯å¾„				-pass		
-	*	ï¼ˆ3ï¼‰ æŸ¥è¯¢å›¾ä¸­ä»»æ„ä¸¤ä¸ªæ™¯ç‚¹é—´çš„æ‰€æœ‰è·¯å¾„				-pass
-	*	ï¼ˆ4ï¼‰ å¢åŠ ã€åˆ é™¤ã€æ›´æ–°æœ‰å…³æ™¯ç‚¹å’Œé“è·¯çš„ä¿¡æ¯			-pass
-	*	ï¼ˆ5ï¼‰ æ±‚ä»æŸæºç‚¹å‡ºå‘åˆ°å¤šä¸ªæ™¯ç‚¹çš„æœ€ä½³ï¼ˆæœ€çŸ­ï¼‰æ¸¸è§ˆè·¯å¾„	-pass
+	int maxValue = 1000;
+
+	/*	¹¦ÄÜ¼ÇÂ¼£º
+	*	£¨1£© ²éÑ¯¸÷¾°µãµÄÏà¹ØĞÅÏ¢							-pass 
+	*	£¨2£© ²éÑ¯Í¼ÖĞÈÎÒâÁ½¸ö¾°µã¼äµÄ×î¶ÌÂ·¾¶				-pass		
+	*	£¨3£© ²éÑ¯Í¼ÖĞÈÎÒâÁ½¸ö¾°µã¼äµÄËùÓĞÂ·¾¶				-pass
+	*	£¨4£© Ôö¼Ó¡¢É¾³ı¡¢¸üĞÂÓĞ¹Ø¾°µãºÍµÀÂ·µÄĞÅÏ¢			-pass
+	*	£¨5£© Çó´ÓÄ³Ô´µã³ö·¢µ½¶à¸ö¾°µãµÄ×î¼Ñ£¨×î¶Ì£©ÓÎÀÀÂ·¾¶	-pass
 	*/
 
 	Graphlnk<int, int> G1(5);
 
 	/*	
-	*	å¢åŠ æ™¯ç‚¹ä¿¡æ¯
+	*	Ôö¼Ó¾°µãĞÅÏ¢
 	*/
 	int i0 = 0;
-	G1.insertVertex(i0, "000", "000", "000");
+	G1.insertVertex(i0, "000", "¾°µã0", "¹«Ô°");
 	int i1 = 1;
-	G1.insertVertex(i1, "111", "111", "111");
+	G1.insertVertex(i1, "001", "¾°µã1", "Ğ¡³Ø");
+	int i2 = 2;
+	G1.insertVertex(i2, "002", "¾°µã2", "»¨Ô°");
+	int i3 = 3;
+	G1.insertVertex(i3, "003", "¾°µã3", "Ğ¡ÇÅ");
+	int i4 = 4;
+	G1.insertVertex(i4, "004", "¾°µã4", "¹ÅÂ¥");
+
 
 	/*
-	*	å¢åŠ æ™¯ç‚¹é“è·¯ä¿¡æ¯
+	*	Ôö¼Ó¾°µãµÀÂ·ĞÅÏ¢
 	*/
-	int weight = 1;
+	int weight = 10;
 	G1.insertEdge(i0, i1, weight);
 
-	int k3 = G1.getFirstNeighbor(i0);
-	cout << "i0 's first neighbor : " << k3 << endl;
+	//int k3 = G1.getFirstNeighbor(i0);
+	//cout << "i0 's first neighbor : " << k3 << endl;
 
-	int i2 = 2;
-	weight = 2;
-	G1.insertVertex(i2, "222", "222", "222");
-	G1.insertEdge(i0, i2, weight);
+	weight = 50;
+	G1.insertEdge(i1, i2, weight);
+	weight = 20;
+	G1.insertEdge(i2, i3, weight);
+	weight = 60;
+	G1.insertEdge(i3, i4, weight);
+	weight = 100;
+	G1.insertEdge(i4, i0, weight);
+	weight = 10;
+	G1.insertEdge(i2, i4, weight);
+	weight = 30;
+	G1.insertEdge(i0, i3, weight);
 
 	/*
-	*	æŸ¥è¯¢æ™¯ç‚¹ä¿¡æ¯ï¼ˆæ­¤å¤„ä¸ºæ·±åº¦ä¼˜å…ˆéå† å’Œ å¹¿åº¦ä¼˜å…ˆéå†ï¼‰
+	*	²éÑ¯¾°µãĞÅÏ¢£¨´Ë´¦ÎªÉî¶ÈÓÅÏÈ±éÀú ºÍ ¹ã¶ÈÓÅÏÈ±éÀú£©
 	*/
-	cout << "æ·±åº¦ä¼˜å…ˆéå†ï¼š" << endl;
+	cout << "Éî¶ÈÓÅÏÈ±éÀú£º" << endl;
 	DFS<int, int>(G1, i0);
-	cout << "å¹¿åº¦ä¼˜å…ˆéå†ï¼š" << endl;
+	cout << "¹ã¶ÈÓÅÏÈ±éÀú£º" << endl;
 	BFS<int, int>(G1, i0);
-	cout << "éå†ç»“æŸï¼š" << endl;
+	cout << "±éÀú½áÊø£º" << endl;
 
 	/*
-	*	æŸ¥è¯¢å›¾ä¸­ä»»æ„ä¸¤ä¸ªæ™¯ç‚¹é—´çš„æœ€çŸ­è·¯å¾„
+	*	²éÑ¯Í¼ÖĞÈÎÒâÁ½¸ö¾°µã¼äµÄ×î¶ÌÂ·¾¶
 	*/
 	int v1 = G1.getVertexPos(1);
 	int v2 = G1.getVertexPos(2);
-	weight = 4;
-	G1.insertEdge(v1, v2, weight);
 	
-	int n = G1.NumberOfVertices();	// å¾—åˆ°é¡¶ç‚¹æ•°
+	int n = G1.NumberOfVertices();	// µÃµ½¶¥µãÊı
 	int * dist = new int[n];
+	for (int i = 0; i < n; i++) {	// distÊı×é³õÊ¼»¯
+		dist[i] = maxValue;
+	}
+
 	int * path = new int[n];
+	for (int i = 0; i < n; i++) {	// pathÊı×é³õÊ¼»¯
+		path[i] = -1;
+	}
 	G1.ShortestPath(G1, v1, dist, path);
 	G1.printShortestPath(G1, v1, dist, path);
 
 	/*
-	*	æŸ¥è¯¢å›¾ä¸­ä»»æ„ä¸¤ä¸ªæ™¯ç‚¹é—´çš„æ‰€æœ‰è·¯å¾„
+	*	²éÑ¯Í¼ÖĞÈÎÒâÁ½¸ö¾°µã¼äµÄËùÓĞÂ·¾¶
 	*/
 	int ** allpaths = new int * [n];
 	for (int i = 0; i < n; i++) {
-		allpaths[i] = new int[n];	// è®°å½•åˆå§‹åŒ–
+		allpaths[i] = new int[n];	// ¼ÇÂ¼³õÊ¼»¯
 		for (int j = 0; j < n; j++) {
 			allpaths[i][j] = -1;
 		}
 	}
 
 	G1.findAllPaths(G1, v1, v2, dist, allpaths);
-	cout << "ç°åœ¨è¾“å‡ºï¼š" << v1 << " åˆ° " << v2 << " çš„æ‰€æœ‰è·¯å¾„" << endl;
+	cout << "ÏÖÔÚÊä³ö£º" << v1 << " µ½ " << v2 << " µÄËùÓĞÂ·¾¶" << endl;
 	for (int i = 0; i < n; i++) {
 		if (allpaths[i][0] != -1) {
-			cout << "ä»ç‚¹ " << v1;
+			cout << "´Óµã " << v1;
 
 			for (int j = 0; j < n; j++) {
 				if (allpaths[i][j] != -1) {
-					cout << "åˆ° " << allpaths[i][j] << " ";
+					cout << "µ½ " << allpaths[i][j] << " ";
 
 					if (allpaths[i][j] == v2) break;
 				}
@@ -92,7 +114,7 @@ int main() {
 
 
 	/*
-	*	æŸ¥è¯¢å›¾ä¸­æŒ‡å®šä¸¤ä¸ªæ™¯ç‚¹é—´çš„æœ€çŸ­è·¯å¾„
+	*	²éÑ¯Í¼ÖĞÖ¸¶¨Á½¸ö¾°µã¼äµÄ×î¶ÌÂ·¾¶
 	*/
 	v1 = G1.getVertexPos(1);
 	v2 = G1.getVertexPos(2);
@@ -100,23 +122,23 @@ int main() {
 	G1.printShortestPath(G1, v1, v2, dist, path);
 
 	/*
-	*	åˆ é™¤æ™¯ç‚¹ä¿¡æ¯
+	*	É¾³ı¾°µãĞÅÏ¢
 	*/
 	v1 = G1.getVertexPos(i1);
 	G1.removeVertex(v1);
 
 	/*
-	*	åˆ é™¤æ™¯ç‚¹é“è·¯ä¿¡æ¯
+	*	É¾³ı¾°µãµÀÂ·ĞÅÏ¢
 	*/
 	v1 = G1.getVertexPos(0);
 	v2 = G1.getVertexPos(2);
 	G1.removeEdge(v1, v2);
 
 	/*
-	*	æ›´æ–°æ™¯ç‚¹ä¿¡æ¯
+	*	¸üĞÂ¾°µãĞÅÏ¢
 	*/
 	int v0 = G1.getVertexPos(0);
-	G1.changeVertexInfo(v0, "00", "00", "00");
+	G1.changeVertexInfo(v0, "008", "ĞÂ¾°µã0", "´ó¹«Ô°");
 
 	Components<int, int>(G1);
 

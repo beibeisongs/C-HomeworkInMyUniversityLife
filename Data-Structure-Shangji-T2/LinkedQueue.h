@@ -35,7 +35,7 @@ public:
 	int getSize() const;
 
 private:
-	friend ostream & operator<< <>(ostream &os, LinkedQueue<T> &Q);
+	friend ostream & operator<< (ostream &os, LinkedQueue<T> &Q);
 
 	LinkedNode<T> * front;
 	LinkedNode<T> * rear;
@@ -83,7 +83,7 @@ bool LinkedQueue<T>::EnQueue(const T &x) {
 	if (p == NULL) {
 		return false;
 	}
-	cout << x << " enter Queue ! " << endl;
+	//cout << x << " enter Queue ! " << endl;
 
 
 	if (this->isEmpty()) {
@@ -107,7 +107,7 @@ bool LinkedQueue<T>::DeQueue(T &x) {
 
 	LinkedNode<T> * p = this->front;
 	x = p->data;
-	cout << "Pop : " << x << endl;
+	//cout << "Pop : " << x << endl;
 
 	this->front = this->front->next;
 	delete p;
